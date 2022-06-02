@@ -29,18 +29,18 @@ contract Auction {
 
     function Auction() public payable{    //constructor
                 
-        //Part 1 Task 1. Initialize beneficiary with address of smart contract’s owner
+        //Part 1 Task 1. Initialize beneficiary with address of smart contractвЂ™s owner
         //Hint. In the constructor,"msg.sender" is the address of the owner.
         // ** Start code here. 1 line approximately. **/
-
+        beneficiary = msg.sender;
           //** End code here. **/
         uint[] memory emptyArray;
         items[0] = Item({itemId:0,itemTokens:emptyArray});
         
         //Part 1 Task 2. Initialize two items with at index 1 and 2. 
         // ** Start code here. 2 lines approximately. **/
-        items[1] = 
-        items[2] =
+        items[1] = Item({itemId:1,itemTokens:emptyArray});
+        items[2] = Item({itemId:2,itemTokens:emptyArray});
         //** End code here**/
     }
     
@@ -54,7 +54,7 @@ contract Auction {
         /*Hint. Here the bidders[bidderCount].addr should be initialized with address of the registrant.*/
 
         // ** Start code here. 1 line approximately. **/
-
+        bidders[bidderCount].addr = msg.sender;
         //** End code here. **
         
         bidders[bidderCount].remainingTokens = 5; // only 5 tokens
@@ -80,15 +80,15 @@ contract Auction {
         */
         
         // ** Start code here. 2 lines approximately. **/
-    
-
+        if (tokenDetails[msg.sender].remainingTokens < _count || tokenDetails[msg.sender].remainingTokens == 0) {revert();}
+        if (_itemId > 2) {revert();}
         //** End code here. **
         
         /*Part 1 Task 5. Decrement the remainingTokens by the number of tokens bid and store the value in balance variable.
         Hint. "tokenDetails[msg.sender].remainingTokens" should be decremented by "_count". */
  
         // ** Start code here. 1 line approximately. **
-        uint balance=
+        uint balance = tokenDetails[msg.sender].remainingTokens - _count;
         //** End code here. **
         
         tokenDetails[msg.sender].remainingTokens=balance;
@@ -104,7 +104,7 @@ contract Auction {
     //Hint : Use require to validate if "msg.sender" is equal to the "beneficiary".
     modifier onlyOwner {
         // ** Start code here. 2 lines approximately. **
-        
+        require(beneficiary == msg.sender);
         _;
         //** End code here. **
     }
@@ -130,8 +130,7 @@ contract Auction {
             you need to assign the address of the person obtained above to winners[id] */
 
             // ** Start coding here *** 1 line approximately.
-            
-                    
+            winners[id] = bidders[winnerId].addr;                    
             //** end code here*
                 
             }
@@ -144,3 +143,4 @@ contract Auction {
     }
 
 }
+
